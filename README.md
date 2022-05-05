@@ -23,7 +23,7 @@ http://localhost:3000/
     http://localhost:3000/api/posts
 
 * To search the post by name and description field - 
-    http://localhost:3000/api/posts/search?name=customer&description=dilshad
+    http://localhost:3000/api/posts/search?q=dilshad
 
 
 ### To run the test cases

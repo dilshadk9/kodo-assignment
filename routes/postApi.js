@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/search', (req, res) => {
-    res.send(postService.searchPost(req.query.name, req.query.description));
+    res.send(postService.searchPost(req.query.q));
 });
 
 
