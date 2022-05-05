@@ -1,4 +1,7 @@
 # Kodo Node.js Assignment
+
+### Prerequisites
+* Download [Node.js v14.17.3](https://nodejs.org/download/release/v14.17.3/)
 * Download the zip file or clone the repository
 
 ### Install the dependent modules
