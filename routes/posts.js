@@ -3,7 +3,7 @@ var router = express.Router();
 var postService = require("../services/posts-service");
 var moment = require("moment"); //for date API
 
-//Function for pagination 
+//Function for pagination
 const pagination = (posts, req) => {
   const pageCount = Math.ceil(posts.length / 10);
   let page = parseInt(req.query.p);
@@ -17,8 +17,7 @@ const pagination = (posts, req) => {
   return [page, pageCount];
 };
 
-
-//Function for Name and Description column sorting 
+//Function for Name and Description column sorting
 const sortByColumn = (a, colIndex) => {
   const sortFunction = (a, b) => {
     if (a[colIndex] === b[colIndex]) {
@@ -61,10 +60,10 @@ router.get("/", async function (req, res, next) {
   });
 });
 
-
 //GET search posts listing
 router.get("/search", async function (req, res, next) {
-  let posts = await postService.searchPost(req.query.q);
+  let posts = await postService.searchRedis(req.query.q);
+
   let totalPosts = posts.length;
 
   let [page, pageCount] = pagination(posts, req);

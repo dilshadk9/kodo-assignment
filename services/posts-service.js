@@ -1,6 +1,19 @@
-var fs = require("fs");
-let rawdata = fs.readFileSync("mock_data.json");
-let posts = JSON.parse(rawdata);
+const fs = require("fs");
+const axios = require("axios");
+const rawdata = fs.readFileSync("mock_data.json");
+const posts = JSON.parse(rawdata);
+const redis = require("redis");
+const redisClient = redis.createClient();
+
+redisClient.on("error", (err) => {
+  console.log("Redis Error: " + err);
+});
+
+redisClient.on("connect", (err) => {
+  console.log("Redis connection successfull");
+});
+
+redisClient.connect();
 
 var postService = {};
 
@@ -12,6 +25,7 @@ postService.searchPost = (q) => {
   if (q == undefined || q == "") {
     return posts;
   }
+
   var searchedPosts = [];
   posts.filter((item) => {
     if (q !== undefined && q != "") {
@@ -49,8 +63,24 @@ postService.searchPost = (q) => {
       }
     }
   });
-  
+
   return searchedPosts;
+};
+
+postService.searchRedis = async (query) => {
+  if (query !== undefined && query != "") {
+    console.log("HTER");
+    const searchUrl = `http://localhost:3000/api/posts/search?q=${query}`;
+    const response = await redisClient.get(query);
+    if (response) {
+      return JSON.parse(response);
+    } else {
+      const { data } = await axios.get(searchUrl);
+      redisClient.set(query, JSON.stringify(data));
+      return data;
+    }
+  }
+  return posts;
 };
 
 module.exports = postService;
